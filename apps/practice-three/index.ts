@@ -10,7 +10,6 @@ type NewsType = {
 
 const news: NewsType[] = require("./news.json");
 
-
 const server = http.createServer((req: any, res: any) => {
   res.setHeader("Content-Type", "text/plain");
 
@@ -22,11 +21,34 @@ const server = http.createServer((req: any, res: any) => {
     res.setHeader("Content-Type", "text/html");
 
     let articles = "";
+
     news.forEach((item: any) => {
-      articles += `<p>${item.title}</p>`;
+      articles += `
+        <article>
+          <h2>${item.title}</h2>
+          <p>${item.description}</p>
+          <small>${item.createdAt}</small>
+        </article>
+      `;
     });
 
-    res.end("Welcome to the main page \n" + articles);
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>News</title>
+        </head>
+        <body>
+          <h1>News</h1>
+      
+          ${articles}
+      
+        </body>
+      </html>
+      `;
+
+    res.end("Welcome to the main page \n" + html);
   }
   else if (myUrl.pathname === "/contact") {
     res.statusCode = 302;
