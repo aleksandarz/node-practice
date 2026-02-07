@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Node",
+    "description": "Node.js basics",
+    "createdAt": "2026-02-01"
+  },
+  {
+    "title": "Backend",
+    "description": "What is backend",
+    "createdAt": "2026-02-02"
+  },
+  {
+    "title": "HTTP",
+    "description": "How HTTP works",
+    "createdAt": "2026-02-03"
+  }
+]

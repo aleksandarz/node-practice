@@ -1,25 +1,20 @@
 
+type NewsType = {
+  title: string,
+  description: string,
+  createdAt: string,
+}
 
 const http = require("http");
 
-type NewsType = {
-  title: string;
-  description: string;
-  createdAt: string;
-}
-
-const news: NewsType[] = require("./news.json");
-
 const server = http.createServer((req: any, res: any) => {
-  res.setHeader("Content-Type", "text/plain");
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
 
-  const myUrl = new URL(req.url, "http://localhost:3000")
-  console.log(myUrl);
+  const myUrl = new URL(req.url, "http://localhost:8080");
+  const news: NewsType[] = require("./news.json");
 
   if (myUrl.pathname === "/") {
     res.statusCode = 200;
-    res.setHeader("Content-Type", "text/html");
-
     let articles = "";
 
     news.forEach((item: any) => {
@@ -50,28 +45,33 @@ const server = http.createServer((req: any, res: any) => {
 
     res.end("Welcome to the main page \n" + html);
   }
+  else if (myUrl.pathname === "/api/news") {
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+
+    res.end(JSON.stringify(news));
+  }
   else if (myUrl.pathname === "/contact") {
     res.statusCode = 302;
-    res.setHeader("Location", "/")
+    res.setHeader("Location", "/");
     res.end();
   }
   else if (myUrl.pathname === "/news") {
     const title = myUrl.searchParams.get("title");
-    const foundArticle = news.find(article => article.title === title);
+    const foundTitle = news.find(item => item.title === title);
 
-    if (foundArticle) {
+    if (foundTitle) {
       res.statusCode = 200;
-      res.end("Welcome to the news page");
+      res.end("Title was found - " + foundTitle.title);
     } else {
       res.statusCode = 404;
-      res.end("Article Not Found");
+      res.end("Title was not found");
     }
   }
   else {
     res.statusCode = 404;
-    res.end("Page Not Found");
+    res.end("404 - Not Found");
   }
-
 });
 
-// server.listen(3000);
+server.listen(8080);
